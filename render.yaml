@@ -3,7 +3,7 @@ services:
   - type: pserv
     name: prism-database
     plan: free
-    postgresMajorVersion: 16 # Use a recent version of PostgreSQL
+    version: "16"      # <-- THIS IS THE CORRECTED LINE
 
   # This defines your Node.js Backend
   - type: web
