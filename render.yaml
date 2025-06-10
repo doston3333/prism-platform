@@ -1,0 +1,33 @@
+services:
+  # This defines your PostgreSQL Database
+  - type: pserv
+    name: prism-database
+    plan: free
+    postgresMajorVersion: 16 # Use a recent version of PostgreSQL
+
+  # This defines your Node.js Backend
+  - type: web
+    name: prism-backend
+    plan: free
+    env: node
+    # Tell Render where to find your backend code
+    rootDir: ./backend
+    buildCommand: "npm install"
+    startCommand: "npm run seed && npm start"
+    envVars:
+      # This automatically gets the connection string from the database above
+      - key: DATABASE_URL
+        fromService:
+          type: pserv
+          name: prism-database
+          property: connectionString
+      # This tells Render to securely generate a secret value for you
+      - key: JWT_SECRET
+        generateValue: true
+      - key: NODE_ENV
+        value: production
+      - key: JWT_EXPIRE
+        value: 7d
+      # IMPORTANT: You must update this later with your real frontend URL
+      - key: CLIENT_URL
+        value: https://your-frontend-will-go-here.vercel.app
